@@ -225,10 +225,129 @@ echo "\n";
  * Ejercicio 10: Dado un array de palabras, devuelve la palabra más larga.
  */
 
+function palabraMasLarga(array $palabras): string {
+    return array_reduce(
+        $palabras,
+        fn($acc, $p) => strlen($p) > strlen($acc) ? $p : $acc,
+        ""
+    );
+
+}
+
 echo "=== EJERCICIO 10 ===\n";
-echo palabraMasLarga(["sol", "estrella", "galaxia", "universo"]) . "\n";
-// -> universo
+echo palabraMasLarga(["sol", "estrellas", "galaxia", "universo"]) . "\n";
+// -> estrellas
+echo "\n";
+
+/*
+ * Ejercicio 11: Dado un array de palabras, devuelve un array con las palabras ordenadas
+ * por longitud de menor a mayor.
+ * (Usando usort con función anónima + array_values)
+ */
+
+
+function ordenarPorLongitud(array $palabras): array {
+/*  
+    usort(
+        $palabras,
+        function($a, $b){
+            return match(true) {
+                strlen($a) < strlen($b) => -1,
+                strlen($a) > strlen($b) => 1,
+                default => 0
+            };
+    });
+*/
+    usort(
+        $palabras,
+        fn($a,$b) => strlen($a) <=> strlen($b)
+        // function($a,$b) {return strlen($a) <=> strlen($b);}
+    );
+
+    return $palabras;
+
+}
+echo "=== EJERCICIO 11 ===\n";
+print_r(ordenarPorLongitud(["php", "programacion", "map", "filters", "reduce"]));
+// -> ["php", "map", "filter", "reduce", "programacion"]
+echo "\n";
+
+/*
+ * Ejercicio 12: Dado un array de números, devuelve un array con los cuadrados
+ * de los números positivos y descarta los negativos.
+ */
+
+function cuadradosPositivos(array $numeros): array {
+    $positivos = array_filter(
+        $numeros,
+        fn($n) => $n >= 0
+    );
+    return array_map(
+        fn($n) => $n ** 2,
+        $positivos
+    );
+
+}
+
+echo "=== EJERCICIO 12 ===\n";
+print_r(cuadradosPositivos([-3, -1, 0, 2, 4]));
+// -> [0, 4, 16]
+echo "\n";
+
+/*
+ * Ejercicio 13: Dado un array de frases, devuelve la suma total de caracteres
+ * (ignorando espacios).
+ */
+
+function totalCaracteresSinEspacios(array $frases): int {
+/*     
+    $sinEspacios = array_map(
+        fn($f) => str_replace(" ", "", $f),
+        $frases);
+    return array_reduce(
+        $sinEspacios,
+        fn($acc, $f) => $acc + strlen($f),
+        0
+    );
+ */
+    return array_reduce(
+        $frases,
+        fn($acc, $f) => $acc + strlen(str_replace(" ", "", $f)),
+        0
+    );
+
+/* 
+    return array_sum(array_map(
+        fn($f) => strlen(str_replace(" ", "", $f)),
+        $frases));
+
+ */
+/*     return strlen(str_replace(" ", "",implode("",$frases))); */
+}
+
+echo "=== EJERCICIO 13 ===\n";
+echo totalCaracteresSinEspacios([
+    "hola mundo",
+    "php es genial",
+    "programacion funcional"
+]) . "\n";
+// -> 41
+echo "\n";
+
+
+/*
+ * Ejercicio 14: Dada una lista de estudiantes con nombre y notas (array de enteros),
+ * devuelve un array asociativo con el nombre y su nota promedio.
+ */
+
+
+echo "=== EJERCICIO 14 ===\n";
+$clase = [
+    ["nombre" => "Ana", "notas" => [7, 8, 9]],
+    ["nombre" => "Luis", "notas" => [5, 6, 7]],
+    ["nombre" => "Marta", "notas" => [9, 9, 10]]
+];
+//print_r(promediosEstudiantes($clase));
+// -> [["nombre"=>"Ana","promedio"=>8], ["nombre"=>"Luis","promedio"=>6], ["nombre"=>"Marta","promedio"=>9.33]]
 echo "\n";
 ?>
-
-
