@@ -339,7 +339,15 @@ echo "\n";
  * Ejercicio 14: Dada una lista de estudiantes con nombre y notas (array de enteros),
  * devuelve un array asociativo con el nombre y su nota promedio.
  */
-
+function promediosEstudiantes(array $estudiantes){
+    return array_map(
+        fn($e) => [
+            "nombre" => $e['nombre'],
+            "promedio" => array_sum($e['notas']) / count($e['notas'])
+        ],
+        $estudiantes
+    );
+}
 
 echo "=== EJERCICIO 14 ===\n";
 $clase = [
@@ -347,7 +355,125 @@ $clase = [
     ["nombre" => "Luis", "notas" => [5, 6, 7]],
     ["nombre" => "Marta", "notas" => [9, 9, 10]]
 ];
-//print_r(promediosEstudiantes($clase));
+print_r(promediosEstudiantes($clase));
 // -> [["nombre"=>"Ana","promedio"=>8], ["nombre"=>"Luis","promedio"=>6], ["nombre"=>"Marta","promedio"=>9.33]]
+echo "\n";
+
+/*
+ * Ejercicio 15: Dado un array de productos con nombre, precio y cantidad,
+ * devuelve el valor total de la compra (precio * cantidad de cada producto).
+ */
+function valorTotalCompra(array $productos): float {
+    return array_reduce(
+        $productos,
+        fn($acc, $p) => $acc + $p['precio'] * $p['cantidad'],
+        0
+    );
+}
+echo "=== EJERCICIO 15 ===\n";
+$carrito = [
+    ["nombre" => "Camisa", "precio" => 20, "cantidad" => 2],
+    ["nombre" => "Pantalón", "precio" => 35, "cantidad" => 1],
+    ["nombre" => "Zapatos", "precio" => 50, "cantidad" => 1]
+];
+echo valorTotalCompra($carrito) . "\n";
+// -> 125
+echo "\n";
+
+/*
+ * Ejercicio 16: Dada una lista de palabras, devuelve un array asociativo
+ * con cada letra inicial y cuántas palabras empiezan por ella.
+ */
+
+function contarPorInicial(array $palabras): array {
+    return array_reduce(
+        $palabras,
+        function ($acc, $p) {
+            // ["perro", "gato", "pajaro", "pez", "gallina"] ["p" => 2,"g" => 1]
+            $inicial = $p[0];
+
+            $acc[$inicial] = ($acc[$inicial] ?? 0 ) + 1;
+/* 
+            if (isset($acc[$inicial])) {
+                $acc[$inicial]++;
+            } else {
+                $acc[$inicial] = 1;
+            }
+ */
+            return $acc;
+        },
+        []
+    );
+}
+
+echo "=== EJERCICIO 16 ===\n";
+print_r(contarPorInicial(["perro", "gato", "pajaro", "pez", "gallina","ola"]));
+// -> ["p"=>3, "g"=>2]
+echo "\n";
+
+/*
+ * Ejercicio 18: Dada una lista de frases, devuelve un array asociativo
+ * con cada palabra y cuántas veces aparece en total.
+ */
+
+function contarPalabras(array $frases): array {
+/*     $texto = implode(" ", $frases);
+    $palabras =explode(" ", strtolower($texto));
+    return array_count_values($palabras); */
+    $palabras = [];
+    foreach($frases as $f){
+        $tokens = explode(" ",strtolower($f));
+        $palabrasFiltradas = array_filter(
+            $tokens,
+            fn($p) => $p !== ""
+        );
+        $palabras = array_merge($palabras, $palabrasFiltradas);
+    }
+    
+    return array_count_values($palabras);
+}
+echo "=== EJERCICIO 18 ===\n";
+print_r(contarPalabras([
+    "Hola mundo  ",
+    "Mundo en PHP",
+    "Hola programación en mundo"
+]));
+// -> ["hola"=>2, "mundo"=>3, "en"=>2, "php"=>1, "programación"=>1]
+echo "\n";
+
+/*
+ * Ejercicio 20: Dada una lista de pedidos (con cliente, producto y total),
+ * devuelve un array con el gasto total por cliente.
+ */
+function gastoPorCliente(array $pedidos): array {
+    // ["cliente"=>"Ana","producto"=>"Camisa","total"=>50]
+    return array_reduce(
+        $pedidos,
+        function($acc, $p){
+            $cliente = $p['cliente']; // "Ana" ["Ana" => 20]
+            $acc[$cliente] = ($acc[$cliente] ?? 0) + $p['total'];
+/* 
+            if (isset($acc[$cliente])){
+                $acc[$cliente] += $p['total'];
+            } else {
+                $acc[$cliente] = $p['total'];
+            }
+             */
+            return $acc;
+        // -> ["Ana"=>70, "Luis"=>35, "Marta"=>40]
+        },
+        []
+    );
+}
+
+echo "=== EJERCICIO 20 ===\n";
+$pedidos = [
+    ["cliente"=>"Ana","producto"=>"Camisa","total"=>20],
+    ["cliente"=>"Luis","producto"=>"Pantalón","total"=>35],
+    ["cliente"=>"Ana","producto"=>"Zapatos","total"=>50],
+    ["cliente"=>"Marta","producto"=>"Bolso","total"=>40]
+];
+print_r(gastoPorCliente($pedidos));
+// -> ["Ana"=>70, "Luis"=>35, "Marta"=>40]
 echo "\n";
 ?>
