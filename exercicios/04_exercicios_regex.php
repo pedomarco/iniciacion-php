@@ -133,10 +133,67 @@ print_r($matches); */
 function exercicio10(){
     $pass = ["abc12312","Abc123%$"];
     foreach($pass as $p){
-        echo preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d])(?=.*\W).{8,}$/",$p) ? "$p VALIDO\n" : "$p NON VALIDO\n";
+        echo preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/",$p) ? "$p VALIDO\n" : "$p NON VALIDO\n";
     }    
 }
 
-exercicio10();
+// -----------------------------
+// EJERCICIO 13
+// Enunciado: Extraer hashtags de un texto.
+// Ejemplo: "Me gusta #PHP y #regex" -> PHP, regex
+function exercicio11(){
+    $text = "Me gusta #PHP y #regex";
+    preg_match_all("/#(\w+)/", $text, $matches);
+    print_r($matches[1]);
+        
+}
 
-?>
+// -----------------------------
+// EJERCICIO 15
+// Enunciado: Extraer direcciones IP de un texto.
+// Ejemplo: "Servidor 192.168.1.1 conectado, backup en 10.0.0.5"
+function exercicio12(){
+    $text = "Servidor 192.168.1.1 conectado, backup en 10.0.0.5";
+    // (?:...) para grupo anonimo
+    preg_match_all("/\b\d{1,3}(?:\.\d{1,3}){3}\b/", $text, $matches);
+    print_r($matches);
+}
+
+// -----------------------------
+// EJERCICIO 16
+// Enunciado: Validar si una URL es correcta.
+// Ejemplo: "https://www.google.com" -> válido
+function exercicio13(){
+    $urls = ["https://www.google.com","http://www.google.com", "ftp://servidor.net", "malaurl", "https://www. espacio.com"];
+    foreach($urls as $u){
+        echo preg_match("/^(https?|ftp):\/\/[^\s]+$/", $u) ? "$u VALIDO\n" : "$u NON VALIDO\n";
+    }
+}
+// -----------------------------
+// EJERCICIO 17
+// Enunciado: Extraer nombres de usuario en correos.
+// Ejemplo: "juan@mail.com" -> juan
+function exercicio17(){
+    $emails = ["juan@mail.com", "ana@test.org"];
+        foreach($emails as $e){
+            preg_match("/^([^@]+)/", $e, $matches);
+            echo $matches[0]."\n";
+    }
+}
+
+// -----------------------------
+// EJERCICIO 18
+// Extraer el dominio (sin la @) de todos los correos en una lista separada por comas.
+// Ejemplo:
+// "ana@mail.com, juan@empresa.es, user@dominio.net" -> [mail.com, empresa.es, dominio.net]
+function exercicio18(){
+    $emails = "ana@mail.com, juan@empresa.es, user@dominio.net";
+    preg_match_all("/([\w.-]+)@([\w.-]+\.[A-z]{2,})/", $emails, $matches);
+    echo "Usuarios:\n";
+    print_r($matches[1]);   
+    echo "Dominios:\n";
+    print_r($matches[2]);   
+    
+}
+
+exercicio18();
